@@ -12,7 +12,7 @@ fi
 # Генерируем сборочные файлы проекта в Debug режиме 
 # и экспортируем compile_commands для адекватной работы clangd
 cmake -S${folder_with_cmakelists} -B${folder_with_cmakelists}'/build' \
--DCMAKE_BUILD_TYPE=Debug \
+-DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 -DCMAKE_TOOLCHAIN_FILE=${folder_with_cmakelists}'/build/conan_toolchain.cmake'
 
