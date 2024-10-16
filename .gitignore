@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# Presets
+CMakeUserPresets.json
+
+# Build
+build
+
+# VSCode
+.cache
+.vscode
