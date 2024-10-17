@@ -24,17 +24,17 @@ public:
 
 private:
     PermissionManager();
-    // We need sender data. I don't know how to get it in convenience mode. Using basic call instead.
+    // We need sender data. I don't know how to get it in convenience mode. Used basic call instead.
     void RequestPermission(sdbus::MethodCall call);
     bool CheckApplicationHasPermission(const std::string& exePath, unsigned int permissionEnumCode) const;
     void CreateTableAppsPermissions();
     std::string GetSenderExecPath(const std::string& senderAddr);
 
 private:
-    SQLite::Database m_dbPermissions{DEFAULT_DB_NAME, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE};
-    sdbus::ServiceName m_serviceName{std::string{DEFAULT_SERVICE_NAME}};
     std::unique_ptr<sdbus::IConnection> m_connection;
     std::unique_ptr<sdbus::IObject> m_object;
+    sdbus::ServiceName m_serviceName{std::string{DEFAULT_SERVICE_NAME}};
+    SQLite::Database m_dbPermissions{DEFAULT_DB_NAME, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE};
 };
 
 #endif  // PERMISSION_MANAGER_H

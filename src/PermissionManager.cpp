@@ -8,11 +8,8 @@
 #include <sdbus-c++/sdbus-c++.h>
 #include <unistd.h>
 
-#include <chrono>
 #include <climits>
-#include <iostream>
 #include <string>
-#include <thread>
 
 #include "common/Permissions.h"
 
@@ -50,7 +47,7 @@ PermissionManager::PermissionManager() {
 void PermissionManager::RequestPermission(sdbus::MethodCall call) {
     unsigned int permissionEnumCode;
     call >> permissionEnumCode;
-    if (not (permissionEnumCode < Permissions::Offset)) {
+    if (not(permissionEnumCode < Permissions::Offset)) {
         sdbus::Error::Name errorName{std::string(DEFAULT_SERVICE_NAME) + ".PermissionError"};
         throw sdbus::Error{errorName, "Unknown permission"};
     }
@@ -61,7 +58,8 @@ void PermissionManager::RequestPermission(sdbus::MethodCall call) {
     if (not CheckApplicationHasPermission(exePath, permissionEnumCode)) {
         try {
             SQLite::Statement insertQuery(m_dbPermissions,
-                                        "INSERT INTO apps_permissions (app_path, permission_enum_code) VALUES (?, ?);");
+                                          "INSERT INTO apps_permissions (app_path, permission_enum_code) "
+                                          "VALUES (?, ?);");
             insertQuery.bind(1, exePath);
             insertQuery.bind(2, permissionEnumCode);
             insertQuery.exec();
@@ -75,7 +73,8 @@ void PermissionManager::RequestPermission(sdbus::MethodCall call) {
     reply.send();
 }
 
-bool PermissionManager::CheckApplicationHasPermission(const std::string& exePath, unsigned int permissionEnumCode) const {
+bool PermissionManager::CheckApplicationHasPermission(const std::string& exePath,
+                                                      unsigned int permissionEnumCode) const {
     bool hasPermission = false;
     try {
         SQLite::Statement insertQuery(
@@ -126,13 +125,4 @@ std::string PermissionManager::GetSenderExecPath(const std::string& senderAddr) 
         sdbus::Error::Name errorName{std::string(DEFAULT_SERVICE_NAME) + ".PathError"};
         throw sdbus::Error{errorName, std::string("Can't find exe path of pid: ") + std::to_string(pid)};
     }
-}
-
-int main() {
-    PermissionManager::Locate();
-    while (true) {
-        std::cout << "working..." << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
-    return 0;
 }
