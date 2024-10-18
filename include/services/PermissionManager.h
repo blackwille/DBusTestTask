@@ -8,9 +8,11 @@
 
 #include <memory>
 
-inline constexpr std::string_view DEFAULT_DB_NAME = "permissions.db3";
-inline constexpr std::string_view DEFAULT_SERVICE_NAME = "com.system.permissions";
-inline constexpr std::string_view DEFAULT_OBJECT_NAME = "/";
+namespace services {
+
+inline constexpr std::string_view PM_DEFAULT_DB_NAME = "permissions.db3";
+inline constexpr std::string_view PM_DEFAULT_SERVICE_NAME = "com.system.permissions";
+inline constexpr std::string_view PM_DEFAULT_OBJECT_NAME = "/";
 
 class PermissionManager {
 public:
@@ -28,13 +30,14 @@ private:
     void RequestPermission(sdbus::MethodCall call);
     bool CheckApplicationHasPermission(const std::string& exePath, unsigned int permissionEnumCode) const;
     void CreateTableAppsPermissions();
-    std::string GetSenderExecPath(const std::string& senderAddr);
 
 private:
     std::unique_ptr<sdbus::IConnection> m_connection;
     std::unique_ptr<sdbus::IObject> m_object;
-    sdbus::ServiceName m_serviceName{std::string{DEFAULT_SERVICE_NAME}};
-    SQLite::Database m_dbPermissions{DEFAULT_DB_NAME, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE};
+    sdbus::ServiceName m_serviceName{std::string{PM_DEFAULT_SERVICE_NAME}};
+    SQLite::Database m_dbPermissions{PM_DEFAULT_DB_NAME, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE};
 };
+
+};  // namespace services
 
 #endif  // PERMISSION_MANAGER_H

@@ -4,6 +4,7 @@
 folder_with_cmakelists='..'
 
 # Если хотите, можно этот скрипт настроить в IDE, явно указав папку до cmakelists проекта
+# Хотя, очевидно, лучше использовать CMakePresets и явно указать в тулчейне экспорт compile_commands
 if [[ $1 ]]; then 
     folder_with_cmakelists=$1
     echo -e "\e[0;34m""Using user specified dir with cmakelists: "$1"\e[0m"

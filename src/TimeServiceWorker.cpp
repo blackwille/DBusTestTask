@@ -2,13 +2,13 @@
 #include <iostream>
 #include <thread>
 
-#include "services/PermissionManager.h"
+#include "services/TimeService.h"
 
 int main() {
-    services::PermissionManager::Locate();
+    services::TimeService::Locate();
     int dotCount = 0;
     while (true) {
-        std::cout << "Permission Manager working";
+        std::cout << "Time Service working";
         for (int i = 0; i < 4; i++) {
             if (i < dotCount) {
                 std::cout << '.';
