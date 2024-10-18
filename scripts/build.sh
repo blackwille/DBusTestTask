@@ -10,7 +10,7 @@ if [[ $1 ]]; then
     echo -e "\e[0;34m""Using user specified dir with cmakelists: "$1"\e[0m"
 fi
 
-# Генерируем сборочные файлы проекта в Debug режиме 
+# Генерируем сборочные файлы проекта в Release режиме (указывается как дефолтный для профиля conan)
 # и экспортируем compile_commands для адекватной работы clangd
 cmake -S${folder_with_cmakelists} -B${folder_with_cmakelists}'/build' \
 -DCMAKE_BUILD_TYPE=Release \
