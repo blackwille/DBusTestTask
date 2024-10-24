@@ -1,3 +1,4 @@
+#include <sdbus-c++/IConnection.h>
 #include <sdbus-c++/Types.h>
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -15,8 +16,10 @@ const std::string PM_REQUEST_PERMISSION = "RequestPermission";
 
 int main() {
     uint64_t timestampNow = 0;
+    std::unique_ptr<sdbus::IConnection> connection{};
     try {
-        auto dbusProxyTS = sdbus::createProxy(sdbus::ServiceName(TS_SERVICE_NAME), sdbus::ObjectPath("/"));
+        connection = sdbus::createSessionBusConnection();
+        auto dbusProxyTS = sdbus::createProxy(*connection, sdbus::ServiceName(TS_SERVICE_NAME), sdbus::ObjectPath("/"));
         dbusProxyTS->callMethod(TS_GET_TIME)
             .onInterface(sdbus::InterfaceName(TS_SERVICE_NAME))
             .storeResultsTo(timestampNow);
@@ -25,7 +28,8 @@ int main() {
             std::cout << "Can not get time due to a lack of permission. Trying to get permission from "
                       << PM_SERVICE_NAME << "..." << std::endl;
             try {
-                auto dbusProxyPM = sdbus::createProxy(sdbus::ServiceName(PM_SERVICE_NAME), sdbus::ObjectPath("/"));
+                auto dbusProxyPM =
+                    sdbus::createProxy(*connection, sdbus::ServiceName(PM_SERVICE_NAME), sdbus::ObjectPath("/"));
                 dbusProxyPM->callMethod(PM_REQUEST_PERMISSION)
                     .onInterface(sdbus::InterfaceName(PM_SERVICE_NAME))
                     .withArguments(common::Permissions::SystemTime);
@@ -35,7 +39,8 @@ int main() {
                 return 0;
             }
             try {
-                auto dbusProxyTS = sdbus::createProxy(sdbus::ServiceName(TS_SERVICE_NAME), sdbus::ObjectPath("/"));
+                auto dbusProxyTS =
+                    sdbus::createProxy(*connection, sdbus::ServiceName(TS_SERVICE_NAME), sdbus::ObjectPath("/"));
                 dbusProxyTS->callMethod(TS_GET_TIME)
                     .onInterface(sdbus::InterfaceName(TS_SERVICE_NAME))
                     .storeResultsTo(timestampNow);

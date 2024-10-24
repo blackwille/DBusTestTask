@@ -12,8 +12,9 @@
 namespace common {
 
 std::string GetSenderExecPath(const std::string& callerInterfaceName, const std::string& senderAddr) {
-    auto dbusProxy =
-        sdbus::createProxy(sdbus::ServiceName("org.freedesktop.DBus"), sdbus::ObjectPath("/org/freedesktop/DBus"));
+    auto connection = sdbus::createSessionBusConnection();
+    auto dbusProxy = sdbus::createProxy(*connection, sdbus::ServiceName("org.freedesktop.DBus"),
+                                        sdbus::ObjectPath("/org/freedesktop/DBus"));
     uint32_t pid;
     dbusProxy->callMethod("GetConnectionUnixProcessID")
         .onInterface("org.freedesktop.DBus")
@@ -36,7 +37,9 @@ bool IsSenderHasPermission(const std::string& callerInterfaceName, const std::st
                            Permissions permission) {
     std::string exePath = GetSenderExecPath(callerInterfaceName, senderAddr);
 
-    auto dbusProxy = sdbus::createProxy(sdbus::ServiceName("com.system.permissions"), sdbus::ObjectPath("/"));
+    auto connection = sdbus::createSessionBusConnection();
+    auto dbusProxy =
+        sdbus::createProxy(*connection, sdbus::ServiceName("com.system.permissions"), sdbus::ObjectPath("/"));
     bool isSenderHasPermission;
     dbusProxy->callMethod("CheckApplicationHasPermission")
         .onInterface("com.system.permissions")
