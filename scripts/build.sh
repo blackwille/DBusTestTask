@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # По умолчанию - папка проекта, которая на 1 уровень выше
-folder_with_cmakelists="$(dirname "$(dirname "$0")")"
+folder_with_cmakelists="$(dirname $(dirname $(realpath -- $0)))"
 
 # Если хотите, можно этот скрипт настроить в IDE, явно указав папку до cmakelists проекта
 # Хотя, очевидно, лучше использовать CMakePresets и явно указать в тулчейне экспорт compile_commands

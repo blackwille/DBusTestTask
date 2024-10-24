@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # По умолчанию - папка проекта, которая на 1 уровень выше
-folder_with_conanfile="$(dirname "$(dirname "$0")")"
+folder_with_conanfile="$(dirname $(dirname $(realpath -- $0)))"
+echo $folder_with_conanfile
 
 # Если хотите, можно этот скрипт настроить в IDE, явно указав папку до conanfile проекта
 # в качестве первого аргумента
