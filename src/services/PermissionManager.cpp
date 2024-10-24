@@ -11,7 +11,7 @@
 namespace services {
 
 PermissionManager::PermissionManager() {
-    m_connection = sdbus::createBusConnection(m_serviceName);
+    m_connection = sdbus::createSessionBusConnection(m_serviceName);
 
     sdbus::ObjectPath objectPath{std::string{PM_DEFAULT_OBJECT_NAME}};
     m_object = sdbus::createObject(*m_connection, objectPath);
